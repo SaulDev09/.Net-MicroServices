@@ -27,7 +27,7 @@ namespace SC.Web.Service.IService
             return await _baseService.SendAsync(new RequestDto()
             {
                 ApiType = ApiType.DELETE,
-                Url = SD.CouponAPIBase + "/api/CouponAPI/" + id
+                Url = SD.CouponAPIBase + "/api/CouponAPI?id=" + id
             });
         }
 
