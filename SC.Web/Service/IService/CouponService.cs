@@ -18,7 +18,7 @@ namespace SC.Web.Service.IService
             {
                 ApiType = ApiType.POST,
                 Data = couponDto,
-                Url = SD.CouponAPIBase + "/api/coupon"
+                Url = SD.CouponAPIBase + "/api/CouponAPI"
             });
         }
 
@@ -27,7 +27,7 @@ namespace SC.Web.Service.IService
             return await _baseService.SendAsync(new RequestDto()
             {
                 ApiType = ApiType.DELETE,
-                Url = SD.CouponAPIBase + "/api/coupon/" + id
+                Url = SD.CouponAPIBase + "/api/CouponAPI/" + id
             });
         }
 
@@ -36,7 +36,7 @@ namespace SC.Web.Service.IService
             return await _baseService.SendAsync(new RequestDto()
             {
                 ApiType = ApiType.GET,
-                Url = SD.CouponAPIBase + "/api/coupon"
+                Url = SD.CouponAPIBase + "/api/CouponAPI"
             });
         }
 
@@ -45,7 +45,7 @@ namespace SC.Web.Service.IService
             return await _baseService.SendAsync(new RequestDto()
             {
                 ApiType = ApiType.GET,
-                Url = SD.CouponAPIBase + "/api/coupon/" + couponCode
+                Url = SD.CouponAPIBase + "/api/CouponAPI/" + couponCode
             });
         }
 
@@ -54,7 +54,7 @@ namespace SC.Web.Service.IService
             return await _baseService.SendAsync(new RequestDto()
             {
                 ApiType = ApiType.GET,
-                Url = SD.CouponAPIBase + "/api/coupon/" + id
+                Url = SD.CouponAPIBase + "/api/CouponAPI/" + id
             });
         }
 
@@ -64,7 +64,7 @@ namespace SC.Web.Service.IService
             {
                 ApiType = ApiType.PUT,
                 Data = couponDto,
-                Url = SD.CouponAPIBase + "/api/coupon"
+                Url = SD.CouponAPIBase + "/api/CouponAPI"
             });
         }
     }
