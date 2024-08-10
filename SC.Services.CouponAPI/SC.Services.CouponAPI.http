@@ -1,0 +1,6 @@
+@SC.Services.CouponAPI_HostAddress = http://localhost:5052
+
+GET {{SC.Services.CouponAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
