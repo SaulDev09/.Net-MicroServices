@@ -1,0 +1,6 @@
+@SC.Services.AuthAPI_HostAddress = http://localhost:5079
+
+GET {{SC.Services.AuthAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
