@@ -1,8 +1,9 @@
 ﻿using SC.Web.Models;
+using SC.Web.Service.IService;
 using SC.Web.Utility;
 using static SC.Web.Utility.SD;
 
-namespace SC.Web.Service.IService
+namespace SC.Web.Service
 {
     public class CouponService : ICouponService
     {
@@ -18,7 +19,7 @@ namespace SC.Web.Service.IService
             {
                 ApiType = ApiType.POST,
                 Data = couponDto,
-                Url = SD.CouponAPIBase + "/api/CouponAPI"
+                Url = CouponAPIBase + "/api/CouponAPI"
             });
         }
 
@@ -27,7 +28,7 @@ namespace SC.Web.Service.IService
             return await _baseService.SendAsync(new RequestDto()
             {
                 ApiType = ApiType.DELETE,
-                Url = SD.CouponAPIBase + "/api/CouponAPI/" + id         // [Route("{id:int}")]      CouponAPIController
+                Url = CouponAPIBase + "/api/CouponAPI/" + id         // [Route("{id:int}")]      CouponAPIController
                 //Url = SD.CouponAPIBase + "/api/CouponAPI?id=" + id    // without Route            CouponAPIController
             });
         }
@@ -37,7 +38,7 @@ namespace SC.Web.Service.IService
             return await _baseService.SendAsync(new RequestDto()
             {
                 ApiType = ApiType.GET,
-                Url = SD.CouponAPIBase + "/api/CouponAPI"
+                Url = CouponAPIBase + "/api/CouponAPI"
             });
         }
 
@@ -46,7 +47,7 @@ namespace SC.Web.Service.IService
             return await _baseService.SendAsync(new RequestDto()
             {
                 ApiType = ApiType.GET,
-                Url = SD.CouponAPIBase + "/api/CouponAPI/" + couponCode
+                Url = CouponAPIBase + "/api/CouponAPI/" + couponCode
             });
         }
 
@@ -55,7 +56,7 @@ namespace SC.Web.Service.IService
             return await _baseService.SendAsync(new RequestDto()
             {
                 ApiType = ApiType.GET,
-                Url = SD.CouponAPIBase + "/api/CouponAPI/" + id
+                Url = CouponAPIBase + "/api/CouponAPI/" + id
             });
         }
 
@@ -65,7 +66,7 @@ namespace SC.Web.Service.IService
             {
                 ApiType = ApiType.PUT,
                 Data = couponDto,
-                Url = SD.CouponAPIBase + "/api/CouponAPI"
+                Url = CouponAPIBase + "/api/CouponAPI"
             });
         }
     }
