@@ -49,7 +49,9 @@ namespace SC.Web.Controllers
             }
             else
             {
-                ModelState.AddModelError("CustomError", responseDto.Message);
+                //ModelState.AddModelError("CustomError", responseDto.Message);
+                //return View(obj);
+                TempData["error"] = responseDto.Message;
                 return View(obj);
             }
         }

@@ -30,7 +30,7 @@ namespace SC.Web.Service
                 ApiType = ApiType.POST,
                 Data = loginRequestDto,
                 Url = AuthAPIBase + "/api/AuthAPI/login"
-            });
+            }, withBearer: false);
         }
 
         public async Task<ResponseDto> Register(RegistrationRequestDto model)
@@ -40,7 +40,7 @@ namespace SC.Web.Service
                 ApiType = ApiType.POST,
                 Data = model,
                 Url = AuthAPIBase + "/api/AuthAPI/register"
-            });
+            }, withBearer: false);
         }
     }
 }
