@@ -2,6 +2,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using SC.Services.ProductAPI;
 using SC.Services.ProductAPI.Data;
 using SC.Services.ProductAPI.Extensions;
 
