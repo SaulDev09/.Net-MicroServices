@@ -1,4 +1,6 @@
-﻿namespace SC.Web.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace SC.Web.Models
 {
     public class ProductDto
     {
@@ -8,7 +10,7 @@
         public string Description { get; set; }
         public string CategoryName { get; set; }
         public string? ImageUrl { get; set; }
-        public string? ImageLocalPath { get; set; }
-        public IFormFile? Image { get; set; }
+        [Range(1, 100)]
+        public int Count { get; set; }
     }
 }
