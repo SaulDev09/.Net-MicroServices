@@ -16,7 +16,7 @@ namespace SC.Services.ShoppingCartAPI.Service
         public async Task<CouponDto> GetCoupon(string couponCode)
         {
             var client = _httpClientFactory.CreateClient("Coupon");
-            var response = await client.GetAsync($"/api/CouponGetByCode/{couponCode}");
+            var response = await client.GetAsync($"/api/CouponAPI/GetByCode/{couponCode}");
             var apiContent = await response.Content.ReadAsStringAsync();
             var resp = JsonConvert.DeserializeObject<ResponseDto>(apiContent);
             if (resp.IsSuccess)
