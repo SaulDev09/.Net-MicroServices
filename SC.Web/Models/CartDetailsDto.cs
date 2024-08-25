@@ -1,4 +1,4 @@
-﻿namespace SC.Services.ShoppingCartAPI.Models.Dto
+﻿namespace SC.Web.Models
 {
     public class CartDetailsDto
     {

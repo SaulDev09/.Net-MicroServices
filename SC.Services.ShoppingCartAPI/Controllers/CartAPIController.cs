@@ -28,7 +28,7 @@ namespace SC.Services.ShoppingCartAPI.Controllers
         }
 
         [HttpGet("GetCart/{userId}")]
-        public async Task<ResponseDto> GetCat(string userId)
+        public async Task<ResponseDto> GetCart(string userId)
         {
             try
             {
