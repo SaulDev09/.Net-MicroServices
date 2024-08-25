@@ -5,6 +5,8 @@ using Microsoft.OpenApi.Models;
 using SC.Services.ShoppingCartAPI;
 using SC.Services.ShoppingCartAPI.Data;
 using SC.Services.ShoppingCartAPI.Extensions;
+using SC.Services.ShoppingCartAPI.Service;
+using SC.Services.ShoppingCartAPI.Service.IService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +24,11 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 #endregion
 
 // Add services to the container.
+#region [ProductService]
+builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddHttpClient("Product", x => x.BaseAddress =
+new Uri(builder.Configuration["ServiceUrls:ProductAPI"]));
+#endregion
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
