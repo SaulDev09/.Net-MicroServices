@@ -30,6 +30,12 @@ builder.Services.AddHttpClient("Product", x => x.BaseAddress =
 new Uri(builder.Configuration["ServiceUrls:ProductAPI"]));
 #endregion
 
+#region [CouponService]
+builder.Services.AddScoped<ICouponService, CouponService>();
+builder.Services.AddHttpClient("Coupon", x => x.BaseAddress =
+new Uri(builder.Configuration["ServiceUrls:CouponAPI"]));
+#endregion
+
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
