@@ -33,5 +33,41 @@ namespace SC.Web.Controllers
             }
             return new CartDto();
         }
+
+        public async Task<IActionResult> Remove(int cartDetailsId)
+        {
+            ResponseDto response = await _cartService.RemoveCart(cartDetailsId);
+            if (response != null && response.IsSuccess)
+            {
+                TempData["success"] = "Cart Deleted Successfully";
+                return RedirectToAction(nameof(CartIndex));
+            }
+            return View();
+        }
+
+        // ApplyCoupon
+        public async Task<IActionResult> ApplyCoupon(CartDto cartDto)
+        {
+            ResponseDto responseDto = await _cartService.ApplyCoupon(cartDto);
+            if (responseDto != null && responseDto.IsSuccess)
+            {
+                TempData["success"] = "Coupon Applied";
+                return RedirectToAction(nameof(CartIndex));
+            }
+            return View();
+        }
+
+        // RemoveCoupon
+        public async Task<IActionResult> RemoveCoupon(CartDto cartDto)
+        {
+            cartDto.CartHeader.CouponCode = String.Empty;
+            ResponseDto responseDto = await _cartService.ApplyCoupon(cartDto);
+            if (responseDto != null && responseDto.IsSuccess)
+            {
+                TempData["success"] = "Coupon Removed";
+                return RedirectToAction(nameof(CartIndex));
+            }
+            return View();
+        }
     }
 }
