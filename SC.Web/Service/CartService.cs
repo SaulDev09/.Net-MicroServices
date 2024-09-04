@@ -51,5 +51,15 @@ namespace SC.Web.Service
                 Url = CartAPIBase + "/api/CartAPI/CartUpsert"
             });
         }
+
+        public async Task<ResponseDto?> EmailCartRequest(CartDto cartDto)
+        {
+            return await _baseService.SendAsync(new RequestDto()
+            {
+                ApiType = ApiType.POST,
+                Data = cartDto,
+                Url = CartAPIBase + "/api/CartAPI/EmailCartRequest"
+            });
+        }
     }
 }

@@ -8,5 +8,6 @@ namespace SC.Web.Service.IService
         Task<ResponseDto?> UpsertCart(CartDto cartDto);
         Task<ResponseDto?> RemoveCart(int cartDetailsId);
         Task<ResponseDto?> ApplyCoupon(CartDto cartDto);
+        Task<ResponseDto?> EmailCartRequest(CartDto cartDto);
     }
 }

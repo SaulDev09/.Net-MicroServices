@@ -2,6 +2,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using SC.MessageBus;
 using SC.Services.ShoppingCartAPI;
 using SC.Services.ShoppingCartAPI.Data;
 using SC.Services.ShoppingCartAPI.Extensions;
@@ -40,6 +41,10 @@ new Uri(builder.Configuration["ServiceUrls:ProductAPI"])).AddHttpMessageHandler<
 builder.Services.AddScoped<ICouponService, CouponService>();
 builder.Services.AddHttpClient("Coupon", x => x.BaseAddress =
 new Uri(builder.Configuration["ServiceUrls:CouponAPI"])).AddHttpMessageHandler<BackendApiAuthenticationHttpClientHandler>();
+#endregion
+
+#region [MessageBus]
+builder.Services.AddScoped<IMessageBus, MessageBus>();
 #endregion
 
 builder.Services.AddControllers();
