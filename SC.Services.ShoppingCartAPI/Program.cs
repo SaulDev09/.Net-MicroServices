@@ -7,6 +7,7 @@ using SC.Services.ShoppingCartAPI.Data;
 using SC.Services.ShoppingCartAPI.Extensions;
 using SC.Services.ShoppingCartAPI.Service;
 using SC.Services.ShoppingCartAPI.Service.IService;
+using SC.Services.ShoppingCartAPI.Utility;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,17 +24,22 @@ builder.Services.AddSingleton(mapper);
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 #endregion
 
+#region [Sharing Token]
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<BackendApiAuthenticationHttpClientHandler>();
+#endregion
+
 // Add services to the container.
 #region [ProductService]
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddHttpClient("Product", x => x.BaseAddress =
-new Uri(builder.Configuration["ServiceUrls:ProductAPI"]));
+new Uri(builder.Configuration["ServiceUrls:ProductAPI"])).AddHttpMessageHandler<BackendApiAuthenticationHttpClientHandler>();
 #endregion
 
 #region [CouponService]
 builder.Services.AddScoped<ICouponService, CouponService>();
 builder.Services.AddHttpClient("Coupon", x => x.BaseAddress =
-new Uri(builder.Configuration["ServiceUrls:CouponAPI"]));
+new Uri(builder.Configuration["ServiceUrls:CouponAPI"])).AddHttpMessageHandler<BackendApiAuthenticationHttpClientHandler>();
 #endregion
 
 builder.Services.AddControllers();

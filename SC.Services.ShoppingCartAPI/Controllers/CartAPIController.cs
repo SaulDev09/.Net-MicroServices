@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SC.Services.ShoppingCartAPI.Data;
@@ -10,6 +11,7 @@ namespace SC.Services.ShoppingCartAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class CartAPIController : ControllerBase
     {
         private readonly AppDbContext _db;
