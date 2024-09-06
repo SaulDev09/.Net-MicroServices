@@ -1,5 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using SC.Services.EmailAPI.Data;
+using SC.Services.EmailAPI.Extension;
+using SC.Services.EmailAPI.Messaging;
+using SC.Services.EmailAPI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,9 +13,12 @@ builder.Services.AddDbContext<AppDbContext>(option =>
 });
 #endregion
 
+var optionBuilder = new DbContextOptionsBuilder<AppDbContext>();
+optionBuilder.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+builder.Services.AddSingleton(new EmailService(optionBuilder.Options));
 
 // Add services to the container.
-
+builder.Services.AddSingleton<IAzureServiceBusConsumer, AzureServiceBusConsumer>();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -33,6 +39,7 @@ app.UseAuthorization();
 
 app.MapControllers();
 ApplyMigration(); // Added
+app.UseAzureServiceBusConsumer();
 app.Run();
 
 #region [EF Migration]
