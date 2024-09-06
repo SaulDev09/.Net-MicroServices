@@ -20,5 +20,9 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.7.0" />
     <PackageReference Include="System.Formats.Asn1" Version="8.0.1" />
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SC.MessageBus\SC.MessageBus.csproj" />
+  </ItemGroup>
   
 </Project>

@@ -33,6 +33,16 @@ namespace SC.Services.EmailAPI.Services
             await LogAndEmail(message.ToString(), cartDto.CartHeader.Email);
         }
 
+        public async Task EmailRegisterUserAndLog(string email)
+        {
+            StringBuilder message = new StringBuilder();
+
+            message.AppendLine("<br/>User Registered");
+            message.AppendLine("<br/>User:" + email);
+            message.AppendLine("<br/>");
+            await LogAndEmail(message.ToString(), email);
+        }
+
         private async Task<bool> LogAndEmail(string message, string email)
         {
             try

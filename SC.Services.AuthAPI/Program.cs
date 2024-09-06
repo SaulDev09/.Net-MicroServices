@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using SC.MessageBus;
 using SC.Services.AuthAPI.Data;
 using SC.Services.AuthAPI.Models;
 using SC.Services.AuthAPI.Service;
@@ -20,6 +21,10 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFramework
     .AddDefaultTokenProviders();
 #endregion
 // Add services to the container.
+
+#region [MessageBus]
+builder.Services.AddScoped<IMessageBus, MessageBus>();
+#endregion
 
 builder.Services.AddControllers();
 builder.Services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
