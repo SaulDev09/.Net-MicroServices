@@ -23,9 +23,7 @@ namespace SC.Services.EmailAPI.Messaging
             serviceBusConnectionString = _configuration.GetValue<string>("ServiceBusConnectionString");
             emailCartQueue = _configuration.GetValue<string>("TopicAndQueueNames:EmailShoppingCart");
             registerUserQueue = _configuration.GetValue<string>("TopicAndQueueNames:RegisterUserQueue");
-
-            return;
-
+            
             var client = new ServiceBusClient(serviceBusConnectionString);
             _emailCartProcessor = client.CreateProcessor(emailCartQueue);
             _registerUserProcessor = client.CreateProcessor(registerUserQueue);
@@ -34,7 +32,6 @@ namespace SC.Services.EmailAPI.Messaging
 
         public async Task Start()
         {
-            return;
             _emailCartProcessor.ProcessMessageAsync += OnEmailCartRequestReceived;
             _emailCartProcessor.ProcessErrorAsync += ErrorHandler;
             await _emailCartProcessor.StartProcessingAsync();
