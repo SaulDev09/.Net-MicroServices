@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace SC.OrderAPI.Models.Dto
+namespace SC.Services.OrderAPI.Models.Dto
 {
     public class OrderHeader
     {

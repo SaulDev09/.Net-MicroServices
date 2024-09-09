@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace SC.OrderAPI.Models.Dto
+namespace SC.Services.OrderAPI.Models.Dto
 {
     public class OrderDetails
     {
