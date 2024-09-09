@@ -1,11 +1,82 @@
+using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
+using SC.MessageBus;
+using SC.Services.OrderAPI;
+using SC.Services.OrderAPI.Data;
+using SC.Services.OrderAPI.Extensions;
+using SC.Services.OrderAPI.Service;
+using SC.Services.OrderAPI.Service.IService;
+using SC.Services.OrderAPI.Utility;
+
 var builder = WebApplication.CreateBuilder(args);
 
+#region [Setting up EF - INIT]
+builder.Services.AddDbContext<AppDbContext>(option =>
+{
+    option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
+#endregion
+
+#region [AutoMapper] 
+IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();
+builder.Services.AddSingleton(mapper);
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+#endregion
+
+#region [Sharing Token]
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<BackendApiAuthenticationHttpClientHandler>();
+#endregion
+
 // Add services to the container.
+#region [ProductService]
+builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddHttpClient("Product", x => x.BaseAddress =
+new Uri(builder.Configuration["ServiceUrls:ProductAPI"])).AddHttpMessageHandler<BackendApiAuthenticationHttpClientHandler>();
+#endregion
+
+#region [MessageBus]
+builder.Services.AddScoped<IMessageBus, MessageBus>();
+#endregion
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+
+#region [SwaggerUI PadLock Added]
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition(name: JwtBearerDefaults.AuthenticationScheme, securityScheme: new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Description = "Enter the Bearer Authorization string",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer"
+    });
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = JwtBearerDefaults.AuthenticationScheme
+                }
+            }, new string [] { }
+        }
+    });
+});
+#endregion
+
+#region [Authentication]
+builder.AddAppAuthentication();
+builder.Services.AddAuthorization();
+#endregion
+
 
 var app = builder.Build();
 
@@ -17,9 +88,23 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseAuthentication(); // [Authentication]
 app.UseAuthorization();
 
 app.MapControllers();
-
+ApplyMigration(); // [EF Migration]
 app.Run();
+
+#region [EF Migration]
+void ApplyMigration()
+{
+    using (var scope = app.Services.CreateScope())
+    {
+        var _db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        if (_db.Database.GetPendingMigrations().Count() > 0)
+        {
+            _db.Database.Migrate();
+        }
+    }
+}
+#endregion
