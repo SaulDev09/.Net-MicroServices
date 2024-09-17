@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SC.MessageBus;
 using SC.Services.OrderAPI.Data;
+using SC.Services.OrderAPI.Models;
 using SC.Services.OrderAPI.Models.Dto;
 using SC.Services.OrderAPI.Service.IService;
 using SC.Services.OrderAPI.Utility;
@@ -18,13 +20,17 @@ namespace SC.Services.OrderAPI.Controllers
         private IMapper _mapper;
         private readonly AppDbContext _db;
         private IProductService _productService;
+        private readonly IMessageBus _messageBus;
+        private readonly IConfiguration _configuration;
 
-        public OrderAPIController(IMapper mapper, AppDbContext db, IProductService productService)
+        public OrderAPIController(IMapper mapper, AppDbContext db, IProductService productService, IConfiguration configuration, IMessageBus messageBus)
         {
             _mapper = mapper;
             _db = db;
             _productService = productService;
             this._response = new ResponseDto();
+            _configuration = configuration;
+            _messageBus = messageBus;
         }
 
         [Authorize]
@@ -138,6 +144,17 @@ namespace SC.Services.OrderAPI.Controllers
                     orderHeader.PaymentIntentId = paymentIntent.Id;
                     orderHeader.Status = SD.Status_Approved;
                     _db.SaveChanges();
+
+                    #region [Rewards]
+                    RewardsDto rewardsDto = new()
+                    {
+                        OrderId = orderHeader.OrderHeaderId,
+                        RewardsActivity = Convert.ToInt32(orderHeader.OrderTotal),
+                        UserId = orderHeader.UserId
+                    };
+                    string topicName = _configuration.GetValue<string>("TopicAndQueueNames:OrderCreatedTopic");
+                    await _messageBus.PublishMessage(rewardsDto, topicName);
+                    #endregion
 
                     _response.Result = _mapper.Map<OrderHeaderDto>(orderHeader);
                 }
