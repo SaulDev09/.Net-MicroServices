@@ -1,4 +1,14 @@
+using Microsoft.EntityFrameworkCore;
+using SC.Services.RewardAPI.Data;
+
 var builder = WebApplication.CreateBuilder(args);
+
+#region [Setting up EF - INIT]
+builder.Services.AddDbContext<AppDbContext>(option =>
+{
+    option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
+#endregion
 
 // Add services to the container.
 
@@ -21,5 +31,19 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
-
+ApplyMigration(); // Added
 app.Run();
+
+#region [EF Migration]
+void ApplyMigration()
+{
+    using (var scope = app.Services.CreateScope())
+    {
+        var _db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        if (_db.Database.GetPendingMigrations().Count() > 0)
+        {
+            _db.Database.Migrate();
+        }
+    }
+}
+#endregion
