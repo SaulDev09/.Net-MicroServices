@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using SC.Services.RewardAPI.Data;
+using SC.Services.RewardAPI.Messaging;
+using SC.Services.RewardAPI.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +10,13 @@ builder.Services.AddDbContext<AppDbContext>(option =>
 {
     option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+#endregion
+
+#region [Service Bus]
+var optionBuilder = new DbContextOptionsBuilder<AppDbContext>();
+optionBuilder.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+builder.Services.AddSingleton(new RewardService(optionBuilder.Options));
+builder.Services.AddSingleton<IAzureServiceBusConsumer, AzureServiceBusConsumer>();
 #endregion
 
 // Add services to the container.
