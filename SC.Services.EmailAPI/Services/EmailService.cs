@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SC.Services.EmailAPI.Data;
+using SC.Services.EmailAPI.Message;
 using SC.Services.EmailAPI.Models;
 using SC.Services.EmailAPI.Models.Dto;
 using System.Text;
@@ -63,5 +64,12 @@ namespace SC.Services.EmailAPI.Services
                 return false;
             }
         }
+
+        public async Task LogOrderPlaced(RewardsMessage rewardsDto)
+        {
+            string message = "New Order Placed, <br/> Order Id: " + rewardsDto.OrderId;
+            await LogAndEmail(message, "Saul.Dev09@gmail.com");
+        }
+
     }
 }
