@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using SC.Services.RewardAPI.Data;
+using SC.Services.RewardAPI.Extension;
 using SC.Services.RewardAPI.Messaging;
 using SC.Services.RewardAPI.Service;
 
@@ -41,6 +42,7 @@ app.UseAuthorization();
 
 app.MapControllers();
 ApplyMigration(); // Added
+app.UseAzureServiceBusConsumer();
 app.Run();
 
 #region [EF Migration]
