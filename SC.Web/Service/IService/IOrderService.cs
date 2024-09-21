@@ -1,4 +1,5 @@
-﻿using SC.Web.Models;
+﻿using Microsoft.AspNetCore.Mvc;
+using SC.Web.Models;
 
 namespace SC.Web.Service.IService
 {
@@ -7,5 +8,8 @@ namespace SC.Web.Service.IService
         Task<ResponseDto?> CreateOrder(CartDto cartDto);
         Task<ResponseDto?> CreateStripeSession(StripeRequestDto stripeRequestDto);
         Task<ResponseDto?> ValidateStripeSession(int orderHeaderId);
+        Task<ResponseDto?> Get(string? userId);
+        Task<ResponseDto?> GetOrder(int id);
+        Task<ResponseDto?> UpdateOrderStatus(int orderId, string newStatus);
     }
 }

@@ -42,5 +42,34 @@ namespace SC.Web.Service
                 Url = OrderAPIBase + "/api/OrderAPI/ValidateStripeSession"
             });
         }
+
+        public async Task<ResponseDto?> Get(string? userId)
+        {
+            return await _baseService.SendAsync(new RequestDto()
+            {
+                ApiType = ApiType.GET,
+                Url = OrderAPIBase + "/api/OrderAPI/GetOrders/" + userId
+            });
+        }
+
+        public async Task<ResponseDto?> GetOrder(int id)
+        {
+            return await _baseService.SendAsync(new RequestDto()
+            {
+                ApiType = ApiType.GET,
+                Url = OrderAPIBase + "/api/OrderAPI/GetOrder/" + id
+            });
+        }
+
+        public async Task<ResponseDto?> UpdateOrderStatus(int orderId, string newStatus)
+        {
+            return await _baseService.SendAsync(new RequestDto()
+            {
+                ApiType = ApiType.POST,
+                Data = newStatus,
+                Url = OrderAPIBase + "/api/OrderAPI/UpdateOrderStatus/" + orderId
+            });
+        }
+
     }
 }
