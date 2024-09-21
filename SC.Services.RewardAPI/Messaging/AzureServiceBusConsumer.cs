@@ -26,12 +26,15 @@ namespace SC.Services.RewardAPI.Messaging
             orderCreatedTopic = _configuration.GetValue<string>("TopicAndQueueNames:OrderCreatedTopic");
             orderCreatedRewardSubscription = _configuration.GetValue<string>("TopicAndQueueNames:OrderCreated_Rewards_Subscription");
 
+            return; // TODO JSCJ
+
             var client = new ServiceBusClient(serviceBusConnectionString);
             _rewardProcessor = client.CreateProcessor(orderCreatedTopic, orderCreatedRewardSubscription);
         }
 
         public async Task Start()
         {
+            return; // TODO JSCJ
             _rewardProcessor.ProcessMessageAsync += OnNewOrderRewardsRequestsReceived;
             _rewardProcessor.ProcessErrorAsync += ErrorHandler;
             await _rewardProcessor.StartProcessingAsync();

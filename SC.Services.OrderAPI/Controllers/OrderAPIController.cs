@@ -213,7 +213,7 @@ namespace SC.Services.OrderAPI.Controllers
         }
 
         [Authorize]
-        [HttpPost("")]
+        [HttpPost("UpdateOrderStatus/{orderId:int}")]
         public async Task<ResponseDto> UpdateOrderStatus(int orderId, [FromBody] string newStatus)
         {
             try
