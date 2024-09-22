@@ -42,5 +42,27 @@ namespace SC.Web.Controllers
             }
             return Json(new { data = list });
         }
+
+        [HttpGet]
+        public async Task<IActionResult> OrderDetailAsync(int orderId)
+        {
+            OrderHeaderDto orderHeaderDto = new OrderHeaderDto();
+            string userId = User.Claims.Where(u => u.Type == JwtRegisteredClaimNames.Sub)?.FirstOrDefault()?.Value;
+
+            ResponseDto responseDto = await _orderService.GetOrder(orderId);
+            if (responseDto != null && responseDto.IsSuccess)
+            {
+                orderHeaderDto = JsonConvert.DeserializeObject<OrderHeaderDto>(Convert.ToString(responseDto.Result));
+            }
+
+            if (!User.IsInRole(SD.RoleAdmin) && userId != orderHeaderDto.UserId)
+            {
+                return NotFound();
+            }
+
+
+            return View(orderHeaderDto);
+        }
+
     }
 }
