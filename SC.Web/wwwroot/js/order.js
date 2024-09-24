@@ -1,12 +1,18 @@
 ﻿var dataTable;
 
 $(document).ready(function () {
-    loadDataTable();
+    loadDataTable(getDateTtype());
 });
 
-function loadDataTable() {
+function getDateTtype() {
+    var url = window.location.search;
+    var dataTypes = ["approved", "readyforpickup", "cancelled"];
+    return dataTypes.find(type => url.includes(type)) || "all";
+}
+
+function loadDataTable(status) {
     dataTable = $('#tblData').DataTable({
-        "ajax": { url: "/order/getall" },
+        "ajax": { url: "/order/getall?status=" + status },
         order: [[0, 'desc']],
         "columns": [
             { data: 'orderHeaderId', "width": "5%" },
