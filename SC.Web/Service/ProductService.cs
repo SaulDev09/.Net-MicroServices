@@ -1,5 +1,6 @@
 ﻿using SC.Web.Models;
 using SC.Web.Service.IService;
+using SC.Web.Utility;
 using static SC.Web.Utility.SD;
 
 namespace SC.Web.Service
@@ -19,7 +20,8 @@ namespace SC.Web.Service
             {
                 ApiType = ApiType.POST,
                 Data = productDto,
-                Url = ProductAPIBase + "/api/ProductAPI"
+                Url = ProductAPIBase + "/api/ProductAPI",
+                ContentType = SD.ContentType.MultipartFormData
             });
         }
 
@@ -57,7 +59,8 @@ namespace SC.Web.Service
             {
                 ApiType = ApiType.PUT,
                 Data = productDto,
-                Url = ProductAPIBase + "/api/ProductAPI"
+                Url = ProductAPIBase + "/api/ProductAPI",
+                ContentType = SD.ContentType.MultipartFormData
             });
         }
     }

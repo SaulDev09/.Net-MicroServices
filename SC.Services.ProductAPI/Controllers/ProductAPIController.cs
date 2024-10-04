@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SC.Services.ProductAPI.Data;
+using SC.Services.ProductAPI.Migrations;
 using SC.Services.ProductAPI.Models;
 using SC.Services.ProductAPI.Models.Dto;
 
@@ -80,16 +81,46 @@ namespace SC.Services.ProductAPI.Controllers
 
         [HttpPost]
         [Authorize(Roles = "ADMIN")]
-        public ResponseDto Post([FromBody] ProductDto couponDto)
+        public ResponseDto Post(ProductDto productDto)
         {
             ResponseDto _response = new ResponseDto();
             try
             {
-                Product obj = _mapper.Map<Product>(couponDto);
-                _db.Products.Add(obj);
+                Product product = _mapper.Map<Product>(productDto);
+                _db.Products.Add(product);
                 _db.SaveChanges();
 
-                _response.Result = _mapper.Map<ProductDto>(obj);
+                #region [Saving Image]
+                if (productDto.Image != null)
+                {
+                    string fileName = product.ProductId + Path.GetExtension(productDto.Image.FileName);
+                    string filePath = @"wwwroot\ProductImages\" + fileName;
+
+                    #region [Deleting file with the same name if exists]
+                    var oldFilePathDirectory = Path.Combine(Directory.GetCurrentDirectory(), filePath);
+                    FileInfo fileInfo = new FileInfo(oldFilePathDirectory);
+                    if (fileInfo.Exists)
+                        fileInfo.Delete();
+                    #endregion
+
+                    var filePathDirectory = Path.Combine(Directory.GetCurrentDirectory(), filePath);
+
+                    using (var fileStream = new FileStream(filePathDirectory, FileMode.Create))
+                        productDto.Image.CopyTo(fileStream);
+
+                    var baseURL = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.Value}{HttpContext.Request.PathBase.Value}";
+                    product.ImageUrl = baseURL + "/ProductImages/" + fileName;
+                    product.ImageLocalPath = filePath;
+                }
+                else
+                {
+                    product.ImageUrl = "https://placehold.co/600x400";
+                }
+                _db.Products.Update(product);
+                _db.SaveChanges();
+                #endregion
+
+                _response.Result = _mapper.Map<ProductDto>(product);
             }
             catch (Exception ex)
             {
@@ -101,16 +132,44 @@ namespace SC.Services.ProductAPI.Controllers
 
         [HttpPut]
         [Authorize(Roles = "ADMIN")]
-        public ResponseDto Put([FromBody] ProductDto couponDto)
+        public ResponseDto Put(ProductDto productDto)
         {
             ResponseDto _response = new ResponseDto();
             try
             {
-                Product obj = _mapper.Map<Product>(couponDto);
-                _db.Products.Update(obj);
+                Product product = _mapper.Map<Product>(productDto);
+                #region [Updating Image]
+                if (productDto.Image != null)
+                {
+                    // 1. Deleting previous image
+                    if (!String.IsNullOrEmpty(product.ImageLocalPath))
+                    {
+                        var oldFilePathDirectory = Path.Combine(Directory.GetCurrentDirectory(), product.ImageLocalPath);
+                        FileInfo fileInfo = new FileInfo(oldFilePathDirectory);
+
+                        if (fileInfo.Exists)
+                            fileInfo.Delete();
+                    }
+
+                    // 2. Inserting new image
+                    string fileName = product.ProductId + Path.GetExtension(productDto.Image.FileName);
+                    string filePath = @"wwwroot\ProductImages\" + fileName;
+
+                    var filePathDirectory = Path.Combine(Directory.GetCurrentDirectory(), filePath);
+
+                    using (var filestream = new FileStream(filePathDirectory, FileMode.Create))
+                        productDto.Image.CopyTo(filestream);
+
+                    var baseURL = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.Value}{HttpContext.Request.PathBase.Value}";
+                    product.ImageUrl = baseURL + "/ProductImages/" + fileName;
+                    product.ImageLocalPath = filePath;
+                }
+                #endregion
+
+                _db.Products.Update(product);
                 _db.SaveChanges();
 
-                _response.Result = _mapper.Map<ProductDto>(obj);
+                _response.Result = _mapper.Map<ProductDto>(product);
             }
             catch (Exception ex)
             {
@@ -129,6 +188,18 @@ namespace SC.Services.ProductAPI.Controllers
             try
             {
                 Product obj = _db.Products.First(x => x.ProductId == id);
+                #region [Deleting previous image]
+                if (!string.IsNullOrEmpty(obj.ImageLocalPath))
+                {
+                    var oldFilePathDirectory = Path.Combine(Directory.GetCurrentDirectory(), obj.ImageLocalPath);
+                    FileInfo fileInfo = new FileInfo(oldFilePathDirectory);
+
+                    if (fileInfo.Exists)
+                        fileInfo.Delete();
+
+                }
+                #endregion
+
                 _db.Products.Remove(obj);
                 _db.SaveChanges();
             }

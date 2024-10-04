@@ -71,7 +71,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseAuthentication(); // [Authentication]
 app.UseAuthorization();
-// app.UseStaticFiles();
+app.UseStaticFiles(); // TO UPLOAD IMAGES
 app.MapControllers();
 ApplyMigration(); // [EF Migration]
 app.Run();
