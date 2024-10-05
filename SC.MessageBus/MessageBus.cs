@@ -9,6 +9,8 @@ namespace SC.MessageBus
         private string connectionString = "";
         public async Task PublishMessage(object message, string topic_queue_Name)
         {
+            return; // TODO JSCJ
+
             // Azure Service Bus > Settings > Shared access policies > Click Policy > Primary Connection String
             await using var client = new ServiceBusClient(connectionString);
             ServiceBusSender sender = client.CreateSender(topic_queue_Name);
