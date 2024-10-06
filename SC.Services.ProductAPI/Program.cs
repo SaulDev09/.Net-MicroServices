@@ -62,11 +62,17 @@ builder.Services.AddAuthorization();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+app.UseSwagger();
+app.UseSwaggerUI(c =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+    // https://localhost:7000/swagger/index.html
+    if (!app.Environment.IsDevelopment())
+    {
+        // https://localhost:7000/index.html
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "ProductAPI");
+        c.RoutePrefix = string.Empty;
+    }
+});
 
 app.UseHttpsRedirection();
 app.UseAuthentication(); // [Authentication]
