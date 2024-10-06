@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SC.Services.ProductAPI.Data;
-using SC.Services.ProductAPI.Migrations;
 using SC.Services.ProductAPI.Models;
 using SC.Services.ProductAPI.Models.Dto;
 

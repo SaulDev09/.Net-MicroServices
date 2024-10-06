@@ -4,13 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SC.MessageBus;
 using SC.Services.OrderAPI.Data;
-using SC.Services.OrderAPI.Models;
 using SC.Services.OrderAPI.Models.Dto;
 using SC.Services.OrderAPI.Service.IService;
 using SC.Services.OrderAPI.Utility;
 using Stripe;
 using Stripe.Checkout;
-using System.Collections;
 
 namespace SC.Services.OrderAPI.Controllers
 {
@@ -45,6 +43,7 @@ namespace SC.Services.OrderAPI.Controllers
                 orderHeaderDto.OrderTime = DateTime.Now;
                 orderHeaderDto.Status = SD.Status_Pending;
                 orderHeaderDto.OrderDetails = _mapper.Map<IEnumerable<OrderDetailsDto>>(cartDto.CartDetails);
+                orderHeaderDto.OrderTotal = Math.Round(orderHeaderDto.OrderTotal, 2);
 
                 //OrderHeader orderCreated = await _db.OrderHeaders.AddAsync(_mapper.Map<OrderHeader>(orderHeaderDto)).Entity;
                 OrderHeader orderCreated = _db.OrderHeaders.Add(_mapper.Map<OrderHeader>(orderHeaderDto)).Entity;
