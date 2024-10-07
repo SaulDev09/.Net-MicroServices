@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SC.MessageBus;
 using SC.Services.AuthAPI.Models.Dto;
+using SC.Services.AuthAPI.RabbitMQSender;
 using SC.Services.AuthAPI.Service.IService;
 
 namespace SC.Services.AuthAPI.Controllers
@@ -12,9 +13,15 @@ namespace SC.Services.AuthAPI.Controllers
         private readonly IAuthService _authService;
         protected ResponseDto _responseDto;
         private readonly IConfiguration _configuration;
-        private readonly IMessageBus _messageBus;
+        //private readonly IMessageBus _messageBus;                     // AZURE Service Bus
+        private readonly IRabbitMQAuthMessageSender _messageBus;        // RabbitMQ
 
-        public AuthAPIController(IAuthService authService, IMessageBus messageBus, IConfiguration configuration)
+        public AuthAPIController(
+            IAuthService authService,
+            // IMessageBus messageBus,                  // AZURE Service Bus
+            IRabbitMQAuthMessageSender messageBus,      // RabbitMQ
+            IConfiguration configuration
+            )
         {
             _authService = authService;
             _responseDto = new();
@@ -34,7 +41,8 @@ namespace SC.Services.AuthAPI.Controllers
                 return BadRequest(_responseDto);
             }
 
-            await _messageBus.PublishMessage(model.Email, _configuration.GetValue<string>("TopicAndQueueNames:RegisterUserQueue"));
+            // await _messageBus.PublishMessage(model.Email, _configuration.GetValue<string>("TopicAndQueueNames:RegisterUserQueue"));      // AZURE Service Bus
+            _messageBus.SendMessage(model.Email, _configuration.GetValue<string>("TopicAndQueueNames:RegisterUserQueue"));                  // RabbitMQ
             return Ok(_responseDto);
         }
 

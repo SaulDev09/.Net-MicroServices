@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using SC.MessageBus;
 using SC.Services.AuthAPI.Data;
 using SC.Services.AuthAPI.Models;
+using SC.Services.AuthAPI.RabbitMQSender;
 using SC.Services.AuthAPI.Service;
 using SC.Services.AuthAPI.Service.IService;
 
@@ -23,7 +24,8 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFramework
 // Add services to the container.
 
 #region [MessageBus]
-builder.Services.AddScoped<IMessageBus, MessageBus>();
+// builder.Services.AddScoped<IMessageBus, MessageBus>();                                       // AZURE Service Bus
+builder.Services.AddScoped<IRabbitMQAuthMessageSender, RabbitMQAuthMessageSender>();            // RabbitMQ
 #endregion
 
 builder.Services.AddControllers();
