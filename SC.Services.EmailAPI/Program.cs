@@ -17,6 +17,12 @@ builder.Services.AddDbContext<AppDbContext>(option =>
 var optionBuilder = new DbContextOptionsBuilder<AppDbContext>();
 optionBuilder.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 builder.Services.AddSingleton(new EmailService(optionBuilder.Options));
+
+// RabbitMQ
+/**************************************************************/
+builder.Services.AddHostedService<RabbitMQAuthConsumer>();
+/**************************************************************/
+
 builder.Services.AddSingleton<IAzureServiceBusConsumer, AzureServiceBusConsumer>();
 #endregion
 
