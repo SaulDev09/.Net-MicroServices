@@ -6,6 +6,7 @@ using SC.MessageBus;
 using SC.Services.OrderAPI;
 using SC.Services.OrderAPI.Data;
 using SC.Services.OrderAPI.Extensions;
+using SC.Services.OrderAPI.Messaging;
 using SC.Services.OrderAPI.Service;
 using SC.Services.OrderAPI.Service.IService;
 using SC.Services.OrderAPI.Utility;
@@ -38,7 +39,8 @@ new Uri(builder.Configuration["ServiceUrls:ProductAPI"])).AddHttpMessageHandler<
 #endregion
 
 #region [MessageBus]
-builder.Services.AddScoped<IMessageBus, MessageBus>();
+// builder.Services.AddScoped<IMessageBus, MessageBus>();                                      // AZURE Service Bus
+builder.Services.AddScoped<IRabbitMQOrderMessageSender, RabbitMQOrderMessageSender>();      // RabbitMQ
 #endregion
 
 builder.Services.AddControllers();

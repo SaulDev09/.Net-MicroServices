@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SC.MessageBus;
 using SC.Services.OrderAPI.Data;
+using SC.Services.OrderAPI.Messaging;
 using SC.Services.OrderAPI.Models.Dto;
 using SC.Services.OrderAPI.Service.IService;
 using SC.Services.OrderAPI.Utility;
@@ -20,10 +21,18 @@ namespace SC.Services.OrderAPI.Controllers
         private IMapper _mapper;
         private readonly AppDbContext _db;
         private IProductService _productService;
-        private readonly IMessageBus _messageBus;
+        //private readonly IMessageBus _messageBus;                     // AZURE Service Bus
+        private readonly IRabbitMQOrderMessageSender _messageBus;       // RabbitMQ
         private readonly IConfiguration _configuration;
 
-        public OrderAPIController(IMapper mapper, AppDbContext db, IProductService productService, IConfiguration configuration, IMessageBus messageBus)
+        public OrderAPIController(
+               IMapper mapper,
+               AppDbContext db,
+               IProductService productService,
+               IConfiguration configuration,
+               //IMessageBus messageBus                                 // AZURE Service Bus
+               IRabbitMQOrderMessageSender messageBus                   // RabbitMQ
+            )
         {
             _mapper = mapper;
             _db = db;
@@ -154,7 +163,8 @@ namespace SC.Services.OrderAPI.Controllers
                         UserId = orderHeader.UserId
                     };
                     string topicName = _configuration.GetValue<string>("TopicAndQueueNames:OrderCreatedTopic");
-                    await _messageBus.PublishMessage(rewardsDto, topicName);
+                    //await _messageBus.PublishMessage(rewardsDto, topicName);          // AZURE Service Bus
+                    _messageBus.SendMessage(rewardsDto, topicName);                     // RabbitMQ
                     #endregion
 
                     _response.Result = _mapper.Map<OrderHeaderDto>(orderHeader);
