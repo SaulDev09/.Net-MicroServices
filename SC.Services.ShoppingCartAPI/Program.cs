@@ -6,6 +6,7 @@ using SC.MessageBus;
 using SC.Services.ShoppingCartAPI;
 using SC.Services.ShoppingCartAPI.Data;
 using SC.Services.ShoppingCartAPI.Extensions;
+using SC.Services.ShoppingCartAPI.RabbitMQSender;
 using SC.Services.ShoppingCartAPI.Service;
 using SC.Services.ShoppingCartAPI.Service.IService;
 using SC.Services.ShoppingCartAPI.Utility;
@@ -44,7 +45,8 @@ new Uri(builder.Configuration["ServiceUrls:CouponAPI"])).AddHttpMessageHandler<B
 #endregion
 
 #region [MessageBus]
-builder.Services.AddScoped<IMessageBus, MessageBus>();
+// builder.Services.AddScoped<IMessageBus, MessageBus>();                                       // AZURE Service Bus
+builder.Services.AddScoped<IRabbitMQAuthMessageSender, RabbitMQAuthMessageSender>();            // RabbitMQ
 #endregion
 
 builder.Services.AddControllers();
