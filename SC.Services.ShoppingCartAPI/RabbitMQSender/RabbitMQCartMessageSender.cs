@@ -4,14 +4,14 @@ using System.Text;
 
 namespace SC.Services.ShoppingCartAPI.RabbitMQSender
 {
-    public class RabbitMQAuthMessageSender : IRabbitMQAuthMessageSender
+    public class RabbitMQCartMessageSender : IRabbitMQCartMessageSender
     {
         private readonly string _hostName;
         private readonly string _userName;
         private readonly string _password;
         private IConnection _connection;
 
-        public RabbitMQAuthMessageSender()
+        public RabbitMQCartMessageSender()
         {
             _hostName = "localhost";
             _userName = "guest";

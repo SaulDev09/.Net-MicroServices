@@ -23,7 +23,7 @@ namespace SC.Services.ShoppingCartAPI.Controllers
         private ICouponService _couponService;
         private IConfiguration _configuration;
         //private readonly IMessageBus _messageBus;                     // AZURE Service Bus
-        private readonly IRabbitMQAuthMessageSender _messageBus;        // RabbitMQ
+        private readonly IRabbitMQCartMessageSender _messageBus;        // RabbitMQ
 
         public CartAPIController(
             AppDbContext db,
@@ -31,7 +31,7 @@ namespace SC.Services.ShoppingCartAPI.Controllers
             IProductService productService,
             ICouponService couponService,
             //IMessageBus messageBus,                  // AZURE Service Bus
-            IRabbitMQAuthMessageSender messageBus,     // RabbitMQ
+            IRabbitMQCartMessageSender messageBus,     // RabbitMQ
             IConfiguration configuration
             )
         {

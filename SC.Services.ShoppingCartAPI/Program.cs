@@ -46,7 +46,7 @@ new Uri(builder.Configuration["ServiceUrls:CouponAPI"])).AddHttpMessageHandler<B
 
 #region [MessageBus]
 // builder.Services.AddScoped<IMessageBus, MessageBus>();                                       // AZURE Service Bus
-builder.Services.AddScoped<IRabbitMQAuthMessageSender, RabbitMQAuthMessageSender>();            // RabbitMQ
+builder.Services.AddScoped<IRabbitMQCartMessageSender, RabbitMQCartMessageSender>();            // RabbitMQ
 #endregion
 
 builder.Services.AddControllers();
