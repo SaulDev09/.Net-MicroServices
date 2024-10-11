@@ -20,7 +20,7 @@ builder.Services.AddSingleton(new EmailService(optionBuilder.Options));
 
 // RabbitMQ
 /**************************************************************/
-builder.Services.AddHostedService<RabbitMQOrderConsumer>();
+builder.Services.AddHostedService<RabbitMQAuthConsumer>();
 builder.Services.AddHostedService<RabbitMQCartConsumer>();
 builder.Services.AddHostedService<RabbitMQOrderConsumer>();
 /**************************************************************/
