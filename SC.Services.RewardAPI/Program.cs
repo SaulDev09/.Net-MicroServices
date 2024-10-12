@@ -4,6 +4,7 @@ using SC.Services.RewardAPI.Extension;
 using SC.Services.RewardAPI.Messaging;
 using SC.Services.RewardAPI.Service;
 
+bool _rabbitMQIsFanout = false;
 var builder = WebApplication.CreateBuilder(args);
 
 #region [Setting up EF - INIT]
@@ -18,6 +19,15 @@ var optionBuilder = new DbContextOptionsBuilder<AppDbContext>();
 optionBuilder.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 builder.Services.AddSingleton(new RewardService(optionBuilder.Options));
 builder.Services.AddSingleton<IAzureServiceBusConsumer, AzureServiceBusConsumer>();
+
+
+
+// RabbitMQ Direct
+/**************************************************************/
+if (!_rabbitMQIsFanout)
+    builder.Services.AddHostedService<RabbitMQOrderConsumer>();
+/**************************************************************/
+
 #endregion
 
 // Add services to the container.
