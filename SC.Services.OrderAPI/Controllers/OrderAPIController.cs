@@ -21,8 +21,8 @@ namespace SC.Services.OrderAPI.Controllers
         private IMapper _mapper;
         private readonly AppDbContext _db;
         private IProductService _productService;
-        //private readonly IMessageBus _messageBus;                     // AZURE Service Bus
-        private readonly IRabbitMQOrderMessageSender _messageBus;       // RabbitMQ
+        private readonly IMessageBus _messageBus;                     // AZURE Service Bus
+        //private readonly IRabbitMQOrderMessageSender _messageBus;       // RabbitMQ
         private readonly IConfiguration _configuration;
 
         public OrderAPIController(
@@ -30,8 +30,8 @@ namespace SC.Services.OrderAPI.Controllers
                AppDbContext db,
                IProductService productService,
                IConfiguration configuration,
-               //IMessageBus messageBus                                 // AZURE Service Bus
-               IRabbitMQOrderMessageSender messageBus                   // RabbitMQ
+               IMessageBus messageBus                                 // AZURE Service Bus
+               //IRabbitMQOrderMessageSender messageBus                   // RabbitMQ
             )
         {
             _mapper = mapper;
@@ -163,8 +163,8 @@ namespace SC.Services.OrderAPI.Controllers
                         UserId = orderHeader.UserId
                     };
                     string topicName = _configuration.GetValue<string>("TopicAndQueueNames:OrderCreatedTopic");
-                    //await _messageBus.PublishMessage(rewardsDto, topicName);          // AZURE Service Bus
-                    _messageBus.SendMessage(rewardsDto, topicName);                     // RabbitMQ
+                    await _messageBus.PublishMessage(rewardsDto, topicName);          // AZURE Service Bus
+                    // _messageBus.SendMessage(rewardsDto, topicName);                     // RabbitMQ
                     #endregion
 
                     _response.Result = _mapper.Map<OrderHeaderDto>(orderHeader);

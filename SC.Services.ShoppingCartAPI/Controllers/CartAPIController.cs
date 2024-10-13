@@ -22,16 +22,16 @@ namespace SC.Services.ShoppingCartAPI.Controllers
         private IProductService _productService;
         private ICouponService _couponService;
         private IConfiguration _configuration;
-        //private readonly IMessageBus _messageBus;                     // AZURE Service Bus
-        private readonly IRabbitMQCartMessageSender _messageBus;        // RabbitMQ
+        private readonly IMessageBus _messageBus;                     // AZURE Service Bus
+        //private readonly IRabbitMQCartMessageSender _messageBus;        // RabbitMQ
 
         public CartAPIController(
             AppDbContext db,
             IMapper mapper,
             IProductService productService,
             ICouponService couponService,
-            //IMessageBus messageBus,                  // AZURE Service Bus
-            IRabbitMQCartMessageSender messageBus,     // RabbitMQ
+            IMessageBus messageBus,                  // AZURE Service Bus
+            //IRabbitMQCartMessageSender messageBus,     // RabbitMQ
             IConfiguration configuration
             )
         {
@@ -197,8 +197,8 @@ namespace SC.Services.ShoppingCartAPI.Controllers
         {
             try
             {
-                //await _messageBus.PublishMessage(cartDto, _configuration.GetValue<string>("TopicAndQueueNames:EmailShoppingCart"));       // AZURE Service Bus
-                _messageBus.SendMessage(cartDto, _configuration.GetValue<string>("TopicAndQueueNames:EmailShoppingCart"));                  // RabbitMQ
+                await _messageBus.PublishMessage(cartDto, _configuration.GetValue<string>("TopicAndQueueNames:EmailShoppingCart"));       // AZURE Service Bus
+                // _messageBus.SendMessage(cartDto, _configuration.GetValue<string>("TopicAndQueueNames:EmailShoppingCart"));                  // RabbitMQ
                 _response.Result = true;
             }
             catch (Exception ex)

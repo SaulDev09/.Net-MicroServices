@@ -6,13 +6,15 @@ namespace SC.MessageBus
 {
     public class MessageBus : IMessageBus
     {
-        private string connectionString = "";
+        private bool _azureServiceBusIsEnabled = true;
+
+        private string serviceBusConnectionString = "SC-TOKEN-AZURE-SERVICE-BUS";
         public async Task PublishMessage(object message, string topic_queue_Name)
         {
-            return; // TODO JSCJ
+            if (!_azureServiceBusIsEnabled) { return; }
 
             // Azure Service Bus > Settings > Shared access policies > Click Policy > Primary Connection String
-            await using var client = new ServiceBusClient(connectionString);
+            await using var client = new ServiceBusClient(serviceBusConnectionString);
             ServiceBusSender sender = client.CreateSender(topic_queue_Name);
 
             var jsonMessage = JsonConvert.SerializeObject(message);

@@ -24,8 +24,8 @@ builder.Services.AddSingleton<IAzureServiceBusConsumer, AzureServiceBusConsumer>
 
 // RabbitMQ Direct
 /**************************************************************/
-if (!_rabbitMQIsFanout)
-    builder.Services.AddHostedService<RabbitMQOrderConsumer>();
+//if (!_rabbitMQIsFanout)
+//    builder.Services.AddHostedService<RabbitMQOrderConsumer>();
 /**************************************************************/
 
 #endregion

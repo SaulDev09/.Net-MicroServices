@@ -15,6 +15,7 @@ namespace SC.Services.RewardAPI.Messaging
         private readonly RewardService _rewardService;
 
         private ServiceBusProcessor _rewardProcessor;
+        private bool _azureServiceBusIsEnabled = true;
 
         public AzureServiceBusConsumer(IConfiguration configuration, RewardService rewardService)
         {
@@ -26,7 +27,7 @@ namespace SC.Services.RewardAPI.Messaging
             orderCreatedTopic = _configuration.GetValue<string>("TopicAndQueueNames:OrderCreatedTopic");
             orderCreatedRewardSubscription = _configuration.GetValue<string>("TopicAndQueueNames:OrderCreated_Rewards_Subscription");
 
-            return; // TODO JSCJ
+            if (!_azureServiceBusIsEnabled) { return; }
 
             var client = new ServiceBusClient(serviceBusConnectionString);
             _rewardProcessor = client.CreateProcessor(orderCreatedTopic, orderCreatedRewardSubscription);
@@ -34,7 +35,8 @@ namespace SC.Services.RewardAPI.Messaging
 
         public async Task Start()
         {
-            return; // TODO JSCJ
+            if (!_azureServiceBusIsEnabled) { return; }
+
             _rewardProcessor.ProcessMessageAsync += OnNewOrderRewardsRequestsReceived;
             _rewardProcessor.ProcessErrorAsync += ErrorHandler;
             await _rewardProcessor.StartProcessingAsync();

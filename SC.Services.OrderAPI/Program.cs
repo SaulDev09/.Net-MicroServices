@@ -39,8 +39,8 @@ new Uri(builder.Configuration["ServiceUrls:ProductAPI"])).AddHttpMessageHandler<
 #endregion
 
 #region [MessageBus]
-// builder.Services.AddScoped<IMessageBus, MessageBus>();                                      // AZURE Service Bus
-builder.Services.AddScoped<IRabbitMQOrderMessageSender, RabbitMQOrderMessageSender>();      // RabbitMQ
+builder.Services.AddScoped<IMessageBus, MessageBus>();                                      // AZURE Service Bus
+// builder.Services.AddScoped<IRabbitMQOrderMessageSender, RabbitMQOrderMessageSender>();      // RabbitMQ
 #endregion
 
 builder.Services.AddControllers();

@@ -24,8 +24,8 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFramework
 // Add services to the container.
 
 #region [MessageBus]
-// builder.Services.AddScoped<IMessageBus, MessageBus>();                                       // AZURE Service Bus
-builder.Services.AddScoped<IRabbitMQAuthMessageSender, RabbitMQAuthMessageSender>();            // RabbitMQ
+builder.Services.AddScoped<IMessageBus, MessageBus>();                                       // AZURE Service Bus
+//builder.Services.AddScoped<IRabbitMQAuthMessageSender, RabbitMQAuthMessageSender>();            // RabbitMQ
 #endregion
 
 builder.Services.AddControllers();

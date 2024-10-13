@@ -20,6 +20,7 @@ namespace SC.Services.EmailAPI.Messaging
         private ServiceBusProcessor _registerUserProcessor;
         private ServiceBusProcessor _emailOrderPlacedProcessor;
         private readonly EmailService _emailService;
+        private bool _azureServiceBusIsEnabled = true;
 
         public AzureServiceBusConsumer(IConfiguration configuration, EmailService emailService)
         {
@@ -30,7 +31,7 @@ namespace SC.Services.EmailAPI.Messaging
             orderCreated_Topic = _configuration.GetValue<string>("TopicAndQueueNames:OrderCreatedTopic");
             orderCreated_Email_Subscription = _configuration.GetValue<string>("TopicAndQueueNames:OrderCreated_Rewards_Subscription");
 
-            return; // TODO JSCJ
+            if (!_azureServiceBusIsEnabled) { return; }
 
             var client = new ServiceBusClient(serviceBusConnectionString);
             _emailCartProcessor = client.CreateProcessor(emailCartQueue);
@@ -41,7 +42,8 @@ namespace SC.Services.EmailAPI.Messaging
 
         public async Task Start()
         {
-            return; // TODO JSCJ
+            if (!_azureServiceBusIsEnabled) { return; }
+
             _emailCartProcessor.ProcessMessageAsync += OnEmailCartRequestReceived;
             _emailCartProcessor.ProcessErrorAsync += ErrorHandler;
             await _emailCartProcessor.StartProcessingAsync();
