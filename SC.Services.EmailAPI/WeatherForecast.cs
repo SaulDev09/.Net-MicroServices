@@ -1,4 +1,4 @@
-namespace SC.Services.CouponAPI
+namespace SC.Services.EmailAPI
 {
     public class WeatherForecast
     {

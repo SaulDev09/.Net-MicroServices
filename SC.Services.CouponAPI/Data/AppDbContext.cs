@@ -15,7 +15,7 @@ namespace SC.Services.CouponAPI.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
+            /*
             modelBuilder.Entity<Coupon>().HasData(new Coupon
             {
                 CouponId = 1,
@@ -39,6 +39,7 @@ namespace SC.Services.CouponAPI.Data
                 DiscountAmount = 4,
                 MinAmount = 5,
             });
+            */
         }
     }
 }

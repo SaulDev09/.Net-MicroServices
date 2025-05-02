@@ -1,0 +1,6 @@
+@SC.Services.RewardAPI_HostAddress = http://localhost:5204
+
+GET {{SC.Services.RewardAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
